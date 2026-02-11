@@ -1,10 +1,10 @@
 {
-    "name": "waypointer-digital/kanbino-bug-tracking",
+    "name": "waypointer-digital/bug-tracking-laravel",
     "description": "Kanbino Bug Tracking SDK for Laravel - Error capture, breadcrumbs, and session replay",
     "type": "library",
     "license": "MIT",
     "keywords": ["kanbino", "bug-tracking", "error-tracking", "laravel", "exception-handler"],
-    "homepage": "https://github.com/Waypointer-Digital/kanbino-bug-tracking",
+    "homepage": "https://github.com/Waypointer-Digital/bug-tracking-laravel",
     "authors": [
         {
             "name": "Waypointer Digital",

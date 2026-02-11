@@ -9,14 +9,6 @@ Capture PHP exceptions and JavaScript errors from your Laravel application and s
 
 ## Installation
 
-Add the repository to your project:
-
-```bash
-composer config repositories.kanbino-bt vcs https://github.com/Waypointer-Digital/bug-tracking-laravel.git
-```
-
-Install the package:
-
 ```bash
 composer require waypointer-digital/bug-tracking-laravel
 ```

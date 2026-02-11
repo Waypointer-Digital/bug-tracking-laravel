@@ -1,6 +1,6 @@
 # Kanbino Bug Tracking SDK for Laravel
 
-Capture PHP exceptions, JavaScript errors, and session replays from your Laravel application and send them to [Kanbino](https://kanbino.com).
+Capture PHP exceptions and JavaScript errors from your Laravel application and send them to [Kanbino](https://kanbino.com).
 
 ## Requirements
 
@@ -58,26 +58,6 @@ This captures:
 - Console errors and warnings
 - XHR/fetch requests as breadcrumbs
 - Click and navigation events as breadcrumbs
-
-## Session Replay (optional)
-
-Session replay records DOM changes so you can visually replay what the user did before an error occurred. It uses [rrweb](https://github.com/rrweb-io/rrweb) under the hood.
-
-Enable it in your `.env`:
-
-```env
-KANBINO_BUG_TRACKING_REPLAY_ENABLED=true
-KANBINO_BUG_TRACKING_REPLAY_SAMPLE_RATE=0.1
-```
-
-Add the directive to your layout:
-
-```blade
-@kanbinoScripts
-@kanbinoReplay
-```
-
-The sample rate (`0.1` = 10% of sessions) keeps storage usage manageable.
 
 ## Configuration
 

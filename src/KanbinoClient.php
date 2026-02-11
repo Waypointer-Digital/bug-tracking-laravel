@@ -3,7 +3,7 @@
 namespace Kanbino\BugTracking;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Queue;
+use Kanbino\BugTracking\Jobs\SendErrorReport;
 
 class KanbinoClient
 {
@@ -242,14 +242,8 @@ class KanbinoClient
 
     protected function sendAsync(array $payload): void
     {
-        $dsn = $this->dsn;
-        $url = $this->getEndpointUrl();
-
-        dispatch(function () use ($payload, $dsn, $url) {
-            Http::withHeaders(['X-BT-Key' => $dsn])
-                ->timeout(10)
-                ->post($url, $payload);
-        })->onConnection(config('kanbino-bug-tracking.queue_connection'))
+        SendErrorReport::dispatch($payload, $this->dsn, $this->getEndpointUrl())
+            ->onConnection(config('kanbino-bug-tracking.queue_connection'))
             ->onQueue(config('kanbino-bug-tracking.queue_name', 'default'));
     }
 

@@ -284,12 +284,6 @@ class KanbinoClient
             'batchInterval' => config('kanbino-bug-tracking.javascript.batch_interval', 5000),
         ];
 
-        if (config('kanbino-bug-tracking.replay.enabled', false)) {
-            $configData['enableReplay'] = true;
-            $configData['replayBufferSeconds'] = (int) config('kanbino-bug-tracking.replay.buffer_seconds', 60);
-            $configData['replayMaskAllInputs'] = config('kanbino-bug-tracking.replay.mask_inputs', true);
-        }
-
         $html = '<script>window.__KANBINO_BT_CONFIG=' . json_encode($configData) . ';';
 
         if (auth()->check()) {
@@ -307,20 +301,4 @@ class KanbinoClient
         return $html;
     }
 
-    public function renderReplayTag(): string
-    {
-        if (!$this->isEnabled() || !config('kanbino-bug-tracking.replay.enabled', false)) {
-            return '';
-        }
-
-        $config = json_encode([
-            'dsn' => $this->dsn,
-            'url' => rtrim($this->url, '/') . "/api/bug-tracking/{$this->dsn}",
-            'sampleRate' => config('kanbino-bug-tracking.replay.sample_rate', 0.1),
-            'maskInputs' => config('kanbino-bug-tracking.replay.mask_inputs', true),
-            'chunkInterval' => config('kanbino-bug-tracking.replay.chunk_interval', 10000),
-        ]);
-
-        return "<script>window.__KANBINO_REPLAY_CONFIG={$config};</script>";
-    }
 }

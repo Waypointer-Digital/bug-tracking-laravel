@@ -121,6 +121,18 @@ And these body keys:
 
 Customize via the `request.sanitize_headers` and `request.sanitize_body_keys` config arrays.
 
+## Multi-Tenancy (Spatie)
+
+If your application uses [Spatie Laravel Multitenancy](https://github.com/spatie/laravel-multitenancy) with `queues_are_tenant_aware_by_default` enabled, the `SendErrorReport` job will fail because it has no tenant context.
+
+Add the job to the `not_tenant_aware_jobs` array in `config/multitenancy.php`:
+
+```php
+'not_tenant_aware_jobs' => [
+    \Kanbino\BugTracking\Jobs\SendErrorReport::class,
+],
+```
+
 ## Manual Capture
 
 You can manually capture exceptions or add context:

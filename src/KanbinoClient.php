@@ -275,17 +275,36 @@ class KanbinoClient
             return '';
         }
 
-        $config = json_encode([
+        $configData = [
             'dsn' => $this->dsn,
             'url' => rtrim($this->url, '/') . "/api/bug-tracking/{$this->dsn}",
             'environment' => $this->environment,
             'release' => $this->release,
             'captureConsole' => config('kanbino-bug-tracking.javascript.capture_console', true),
             'batchInterval' => config('kanbino-bug-tracking.javascript.batch_interval', 5000),
-        ]);
+        ];
 
-        return "<script>window.__KANBINO_BT_CONFIG={$config};</script>\n"
+        if (config('kanbino-bug-tracking.replay.enabled', false)) {
+            $configData['enableReplay'] = true;
+            $configData['replayBufferSeconds'] = (int) config('kanbino-bug-tracking.replay.buffer_seconds', 60);
+            $configData['replayMaskAllInputs'] = config('kanbino-bug-tracking.replay.mask_inputs', true);
+        }
+
+        $html = '<script>window.__KANBINO_BT_CONFIG=' . json_encode($configData) . ';';
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            $html .= 'window.__KANBINO_BT_USER=' . json_encode([
+                'id' => (string) $user->id,
+                'email' => $user->email ?? null,
+                'name' => $user->name ?? null,
+            ]) . ';';
+        }
+
+        $html .= "</script>\n"
             . '<script src="' . asset('vendor/kanbino/bug-tracking.js') . '" defer></script>';
+
+        return $html;
     }
 
     public function renderReplayTag(): string

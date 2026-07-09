@@ -187,7 +187,12 @@ class KanbinoClient
             $sanitizeKeys = $config['sanitize_body_keys'] ?? [];
 
             array_walk_recursive($body, function (&$value, $key) use ($sanitizeKeys) {
-                if (in_array(strtolower($key), array_map('strtolower', $sanitizeKeys))) {
+                if ($value instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                    // File uploads cannot be serialized onto the queue
+                    $value = sprintf('[FILE: %s, %d bytes]', $value->getClientOriginalName(), $value->getSize() ?: 0);
+                } elseif (is_object($value)) {
+                    $value = '[OBJECT: ' . get_class($value) . ']';
+                } elseif (in_array(strtolower($key), array_map('strtolower', $sanitizeKeys))) {
                     $value = '[FILTERED]';
                 }
             });
